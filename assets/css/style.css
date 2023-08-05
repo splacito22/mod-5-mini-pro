@@ -1,0 +1,4 @@
+.table-custom thead {
+  background-color: var(--bs-danger);
+  border-bottom: 2px solid var(--bs-dark-bg-subtle);
+}
