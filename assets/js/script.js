@@ -68,10 +68,20 @@ $(function () {
     for (var i = 0; i < projects.length; i++) {
       var project = projects[i];
 
+      var today = dayjs();
+      var dueDate = dayjs(project.dueDate, "YYYY-MM-DD");
+
       var tr = $("<tr>");
+
+      if (dueDate.isSame(today, "day")) {
+        tr.addClass("table-warning");
+      } else if (dueDate.isBefore(today, "day")) {
+        tr.addClass("table-danger");
+      }
+
       tr.append("<td>" + project.name + "</td>");
       tr.append("<td>" + project.type + "</td>");
-      tr.append("<td>" + project.dueDate + "</td>");
+      tr.append("<td>" + dueDate.format("MM/DD/YYYY") + "</td>");
 
       projectTableBody.append(tr);
     }
