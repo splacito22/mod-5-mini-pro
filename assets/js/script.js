@@ -5,6 +5,7 @@ $(function () {
   var projectTypeEl = $("#project-type");
   var projectDueDateEl = $("#project-due-date");
   var projectTableBody = $("#project-table-body");
+  var projectForm = $("#project-form");
   var projectModal = bootstrap.Modal.getOrCreateInstance("#project-form-modal");
 
   //state
@@ -82,6 +83,11 @@ $(function () {
       tr.append("<td>" + project.name + "</td>");
       tr.append("<td>" + project.type + "</td>");
       tr.append("<td>" + dueDate.format("MM/DD/YYYY") + "</td>");
+      tr.append(
+        '<td class="text center"><button data-delete-index="' +
+          i +
+          '" class="btn">X</button></td>'
+      );
 
       projectTableBody.append(tr);
     }
@@ -105,8 +111,16 @@ $(function () {
     }, 1000);
   }
 
+  function handleProjectDelete() {
+    var index = $(this).attr("data-delete-index");
+    projects.splice(index, 1);
+
+    saveProjects();
+    renderProjects();
+  }
   //event listeners
-  $("#project-form").on("submit", handleFormSubmit);
+  projectForm.on("submit", handleFormSubmit);
+  projectTableBody.on("click", "[data-delete-index]", handleProjectDelete);
 
   //initialize
   init();
