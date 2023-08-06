@@ -4,6 +4,7 @@ $(function () {
   var projectNameEl = $("#project-name");
   var projectTypeEl = $("#project-type");
   var projectDueDateEl = $("#project-due-date");
+  var projectTableBody = $("#project-table-body");
   var projectModal = bootstrap.Modal.getOrCreateInstance("#project-form-modal");
 
   //state
@@ -13,6 +14,8 @@ $(function () {
   //functions
   function init() {
     startClock();
+    loadProjects();
+    renderProjects();
   }
 
   function handleFormSubmit(event) {
@@ -36,7 +39,7 @@ $(function () {
     saveProjects();
     clearForm();
     closeModal();
-    // renderProjects();
+    renderProjects();
   }
 
   function closeModal() {
@@ -47,8 +50,31 @@ $(function () {
     localStorage.setItem("projects", JSON.stringify(projects));
   }
 
-  function loaderProjects() {
-    // to do
+  function loadProjects() {
+    var projectsString = localStorage.getItem("projects");
+
+    if (projectsString) {
+      try {
+        projects = JSON.parse(projectsString);
+      } catch (error) {
+        console.log("error loading projects from local storage");
+      }
+    }
+  }
+
+  function renderProjects() {
+    projectTableBody.html("");
+
+    for (var i = 0; i < projects.length; i++) {
+      var project = projects[i];
+
+      var tr = $("<tr>");
+      tr.append("<td>" + project.name + "</td>");
+      tr.append("<td>" + project.type + "</td>");
+      tr.append("<td>" + project.dueDate + "</td>");
+
+      projectTableBody.append(tr);
+    }
   }
 
   function clearForm() {
@@ -70,7 +96,7 @@ $(function () {
   }
 
   //event listeners
-  $("#project-form-submit").on("click", handleFormSubmit);
+  $("#project-form").on("submit", handleFormSubmit);
 
   //initialize
   init();
